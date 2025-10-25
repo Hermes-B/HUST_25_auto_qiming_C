@@ -1,0 +1,80 @@
+#include<stdio.h>
+void sub(int num,double allarr[][num],double k,int i,int j);
+void swap_rows(int num, double allarr[][num], int row1, int row2);
+int main()
+{
+    int num = 0;
+    printf("你要计算几阶的行列式：");
+    scanf("%d",&num);
+    printf("请输入行列式：(每行%d个数字,用空格隔开)\n",num);
+    double allarr[num][num];
+    for(int i = 0; i < num; i++)
+    {
+        printf("第%d行:",i + 1);
+        for(int j = 0;j < num;j++)
+        {
+            scanf("%lf",&allarr[i][j]);
+        }
+        printf("\n");
+    }
+    printf("你的行列式是：\n");
+    for(int i = 0;i < num;i++)
+    {
+        for(int j = 0;j < num;j++)
+        {
+            printf("%4.0f",allarr[i][j]);
+        }
+        printf("\n");
+    }
+
+    double k = 0;//倍数
+    double s = 1;//结果
+    int sign = 1;//行交换后确定符号
+    for(int i = 0;i < num;i++)//i为列
+    {
+        int q = i;//引入一个大于i的数
+        while (q < num && allarr[q][i] == 0) 
+        {
+            q++;
+        }
+
+        if (q == num) {
+            s = 0.0;
+            break;
+        }
+        if (q != i &&q !=num)
+        {
+            swap_rows(num, allarr, i,q);
+            sign = -sign;
+        }
+        for(int j = i + 1;j < num;j++)//j为行
+        {
+            k = (double)allarr[j][i] / allarr[i][i];
+            sub(num,allarr,k,i,j);
+        }
+        double target = allarr[i][i];
+        s = s * target;
+    }
+    printf("行列式结果为：");
+    printf("%.6f",s * sign);
+
+
+}
+
+void sub(int num,double allarr[][num],double k,int i,int j)
+{     
+    for(int m = 0;m < num;m++)
+    {  
+        allarr[j][m] = allarr[j][m] - k * allarr[i][m];
+    }
+}
+
+void swap_rows(int num, double allarr[][num], int row1, int row2)
+{
+    for (int m = 0; m < num; m++) {
+        double temp = allarr[row1][m];
+        allarr[row1][m] = allarr[row2][m];
+        allarr[row2][m] = temp;
+    }
+}
+  
